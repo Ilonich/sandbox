@@ -7,7 +7,17 @@ import java.util.List;
  * Created by Никола on 20.08.2016.
  */
 public class StreamCapabilities {
+    public static void main(String[] args) {
+        List<IntsHolder> test = IntsHolder.getItemsForTest();
+        //фильтр - в качестве параметра предикат
+        test.stream().filter(s -> s.getX() > 5).forEach(System.out::println);
+        //Сортировка. Объекты внутри коллекции не сортируются. Просто возвращается отсортированная коллекция
+        //можно реализовать свой компаратор
+        test.stream().sorted((a, b) -> Integer.compare(a.getX()+a.getY(), b.getX()+b.getY())).findFirst().ifPresent(System.out::println);
+        //Маппинг - преобразовать в другой класс, например
+        test.stream().map(s -> new StringsHolder(String.valueOf(s.getX()), String.valueOf(s.getY()))).forEach(System.out::println);
 
+    }
 
 
 }
@@ -43,11 +53,6 @@ class IntsHolder {
                 ", " + y +
                 ']';
     }
-
-    @FunctionalInterface
-    public interface IntsHolderFactory {
-        IntsHolder create(int x, int y);
-    }
 }
 
 class StringsHolder {
@@ -73,10 +78,5 @@ class StringsHolder {
         return "Strings[" + x +
                 ", " + y +
                 ']';
-    }
-
-    @FunctionalInterface
-    public interface StringsHolderFactory {
-        StringsHolder create(String x, String y);
     }
 }

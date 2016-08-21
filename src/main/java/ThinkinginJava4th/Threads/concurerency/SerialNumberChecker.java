@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Илоныч on 18.08.2016.
+ * Пример как в многопоточной среде общий ресурс может выдать некорректное значение
+ * если не использовать блокировки или атомарные операции (в классе SerialNumberGenerator)
  */
 public class SerialNumberChecker {
     private static final int SIZE = 10;
@@ -36,6 +38,14 @@ public class SerialNumberChecker {
         System.out.println("No duplicates detected");
         System.exit(0);
     }
+
+//виновник
+    public static class SerialNumberGenerator {
+        private static volatile int serialNumber = 0;
+        public static int nextSerialNumber(){
+            return serialNumber++;
+        }
+    }
 }
 // Переиспользует хранилище, не будет outofmemory
 class CircularSet {
@@ -45,7 +55,7 @@ class CircularSet {
     public CircularSet(int size){
         array = new int[size];
         len = size;
-        //Инициация значением вне SerialNumberGenerator
+        //Инициация значением вне значений выдаваемых SerialNumberGenerator
         for (int i = 0; i < size; i++) {
             array[i] = -1;
         }

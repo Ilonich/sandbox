@@ -34,8 +34,6 @@ public class LambdasExpressions {
         test.add(ret.create(3, 2));
         Collections.sort(test, (func::compare));
     }
-
-
 }
 
 class IntsHolder{
